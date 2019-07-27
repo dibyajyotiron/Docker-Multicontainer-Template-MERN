@@ -1,0 +1,28 @@
+sudo: required
+
+# specify docker as dependency
+services:
+  - docker
+
+# build tests
+before_install:
+  - docker build -t dibyajyoti/react-test -f ./client/Dockerfile.dev ./client
+
+# run tests
+script:
+  - docker run diybajyoti/react-test npm test -- --coverage
+
+# build production version of all projects
+after_success:
+  - docker build -t dibyajyoti/multi-container-client ./client
+  - docker build -t dibyajyoti/multi-container-nginx ./nginx
+  - docker build -t dibyajyoti/multi-container-server ./server
+  - docker build -t dibyajyoti/multi-container-worker ./worker
+  # log in to docker hub
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push to docker hub
+  - docker push dibyajyoti/multi-container-client
+  - docker push dibyajyoti/multi-container-nginx
+  - docker push dibyajyoti/multi-container-server
+  - docker push dibyajyoti/multi-container-worker
+# tell EBS to update
