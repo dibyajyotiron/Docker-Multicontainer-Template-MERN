@@ -10,7 +10,7 @@ before_install:
 
 # run tests
 script:
-  - docker run diybajyoti/react-test npm test -- --coverage
+  - docker run dibyajyoti/react-test npm test -- --coverage
 
 # build production version of all projects
 after_success:
