@@ -26,3 +26,15 @@ after_success:
   - docker push dibyajyoti/multi-container-server
   - docker push dibyajyoti/multi-container-worker
 # tell EBS to update
+deploy:
+  provider: elasticbeanstalk
+  region: ap-south-1
+  app: Multi-container
+  env: MultiContainer-env
+  bucket_name: elasticbeanstalk-ap-south-1-752101103034
+  bucket_path: "multi-container"
+  on:
+    branch: master
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
